@@ -1,0 +1,18 @@
+.form-container {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  height: 100vh;
+  z-index: 10;
+  /* width: 100%; */
+  /* border: 1px solid; */
+}
+
+.register-form {
+  border: 1px solid grey;
+  padding: 30px;
+  /* width: 400px; */
+  background-color: rgba(255, 255, 255, 0.85);
+  /* light but see-through */
+  color: #000;
+}

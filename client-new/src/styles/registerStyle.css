@@ -1,0 +1,108 @@
+.form-container {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  height: 100vh;
+  z-index: 10;
+  /* width: 100%; */
+  /* border: 1px solid; */
+}
+
+.register-form {
+  border: 1px solid rgba(255, 255, 255, 0.5);;
+  padding: 30px;
+  width: 400px;
+  background-color: rgba(255, 255, 255, 0.9);
+  /* light but see-through */
+  color: #333;
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(18, 255, 247, 0.2);
+  /* backdrop-filter: blur(4px); */
+}
+
+body {
+  background: linear-gradient(135deg, #b3ffab 0%, #12fff7 100%);
+  background-attachment: fixed;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+.inline-message {
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  font-weight: 500;
+  font-size: 15px;
+  text-align: center;
+  width: 100%;
+}
+
+.inline-message.success {
+  background-color: #e6ffed;
+  color: #2e7d32;
+  border: 1px solid #81c784;
+}
+
+.inline-message.error {
+  background-color: #ffe6e6;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+}
+
+.register-form h2 {
+  color: #006d6b; /* Dark teal that matches your gradient */
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.register-form h2 {
+  color: #006d6b; /* Dark teal that matches your gradient */
+  text-align: center;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.register-form input {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.register-form input:focus {
+  outline: none;
+  border-color: #12fff7; /* Your cyan color */
+  box-shadow: 0 0 0 2px rgba(18, 255, 247, 0.2);
+}
+
+.register-form button {
+  background: linear-gradient(to right, #b3ffab, #12fff7);
+  border: none;
+  color: #006d6b;
+  padding: 12px;
+  border-radius: 6px;
+  width: 100%;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.register-form button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(18, 255, 247, 0.3);
+}
+
+.register-form a {
+  color: #00807d;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register-form a:hover {
+  text-decoration: underline;
+}
