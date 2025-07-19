@@ -129,4 +129,19 @@ npm run dev
 
 > 💡 Make sure MongoDB is running and environment variables are set correctly before starting the server.
 
+---
+---
+
+## 📦 Available Scripts
+
+In the root directory:
+
+```bash
+npm run dev       # Runs backend and frontend concurrently
+npm run server    # Runs backend only
+npm run client    # Runs frontend only (inside /client-new)
+npm start         # Runs the React frontend
+npm run build     # Builds the React app for production
+
+
 
