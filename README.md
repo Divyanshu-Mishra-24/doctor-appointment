@@ -23,7 +23,7 @@ A full-stack web application that allows patients to book appointments with doct
 
 | Frontend     | Backend       | Database   | Authentication |
 |--------------|---------------|------------|----------------|
-| React.js     | Node.js       | MongoDB    | JWT, Google OAuth |
+| React.js     | Node.js       | MongoDB    | JWT |
 | Redux Toolkit| Express.js    | Mongoose   | bcrypt         |
 | Ant Design   | REST API      |            |                |
 
