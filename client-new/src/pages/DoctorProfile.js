@@ -18,7 +18,8 @@ import "../styles/DoctorProfile.css";
 const { Title, Text, Paragraph } = Typography;
 
 const DoctorProfile = () => {
-  const { id } = useParams(); // 'id' here is the doctor's _id from the URL
+  // 🔥 FIXED: Changed from 'id' to 'doctorId' to match the route parameter
+  const { doctorId } = useParams(); 
   const navigate = useNavigate();
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,49 +29,33 @@ const DoctorProfile = () => {
   const [time, setTime] = useState();
   const { user } = useSelector(state => state.user);
 
-  const fetchDoctorProfile = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const token = localStorage.getItem("token");
-      
-      // Fetch basic doctor info using the doctor's _id
-      const res = await axios.post(
-        "/api/v1/doctor/getDoctorById",
-        { doctorId: id }, // Use the doctor's _id from useParams()
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+ const fetchDoctorProfile = async () => {
+  try {
+    setLoading(true);
+    setError(null);
+    const token = localStorage.getItem("token");
 
-      if (res.data.success) {
-        const doctorData = res.data.data;
-        
-        // Try to fetch additional info using the doctor's _id
-        try {
-          // IMPORTANT CHANGE: Pass the doctor's _id (from useParams) to the info endpoint
-          const infoRes = await axios.get(
-            `/api/v1/doctor/info/${id}`, // Corrected: Use 'id' (doctor's _id) here
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          
-          setDoctor({
-            ...doctorData,
-            additionalInfo: infoRes.data.success ? infoRes.data.data : null
-          });
-        } catch (infoError) {
-          console.log("Couldn't fetch additional user info for doctor ID:", id, infoError); // Added doctor ID for debugging
-          setDoctor(doctorData); // Use basic doctor data only if additional info fails
-        }
-      } else {
-        setError(res.data.message || 'Failed to fetch doctor profile');
-      }
-    } catch (err) {
-      console.error('Fetch error in DoctorProfile:', err); // More specific error logging
-      setError(err.response?.data?.message || 'Failed to fetch doctor profile');
-    } finally {
-      setLoading(false);
+    console.log("🔍 Fetching doctor with ID:", doctorId);
+
+    const res = await axios.post(
+      "/api/v1/doctor/getDoctorById",
+      { doctorId }, // Using the doctorId from URL params
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    if (!res.data.success || !res.data.data) {
+      throw new Error(res.data.message || "Doctor not found");
     }
-  };
 
+    setDoctor(res.data.data);
+
+  } catch (err) {
+    console.error("❌ Fetch error:", err);
+    setError(err.response?.data?.message || "Error fetching doctor");
+  } finally {
+    setLoading(false);
+  }
+};
   const handleBooking = async () => {
     if (!date || !time) {
       message.warning("Please select both date and time");
@@ -83,18 +68,18 @@ const DoctorProfile = () => {
       const res = await axios.post(
         '/api/v1/user/book-appointment',
         {
-          doctorId: id, // This is the doctor's _id
-          userId: user._id, // This is the current authenticated user's _id
+          doctorId: doctorId, // 🔥 FIXED: Using consistent doctorId
+          userId: user._id,
           doctorInfo: doctor,
           userInfo: user,
-          date: moment(date).format('DD-MM-YYYY'),
+          date,
           time: time.format("HH:mm")
         },
         {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
-      
+
       if (res.data.success) {
         message.success(res.data.message);
         setBookingModalVisible(false);
@@ -104,7 +89,7 @@ const DoctorProfile = () => {
         message.error(res.data.message || "Failed to book appointment");
       }
     } catch (error) {
-      console.error("Booking error:", error);
+      console.error("❌ Booking error:", error);
       message.error(
         error.response?.data?.message || "Failed to book appointment"
       );
@@ -140,7 +125,7 @@ const DoctorProfile = () => {
 
   useEffect(() => {
     fetchDoctorProfile();
-  }, [id]); // Dependency array includes 'id' to refetch if doctor ID changes
+  }, [doctorId]); // 🔥 FIXED: Dependency array now uses doctorId
 
   if (loading) {
     return (
@@ -245,12 +230,11 @@ const DoctorProfile = () => {
             <Col xs={24} md={16}>
               <div className="doctor-details-section">
                 <Title level={4} className="section-title">
-                  <UserOutlined /> About Doctor
-                </Title>
-                <Paragraph>
-                  {doctor.bio || doctor.additionalInfo?.bio || "No bio available"}
-                </Paragraph>
-                
+  <UserOutlined /> About Doctor
+</Title>
+<Paragraph>
+  {doctor.additionalInfo?.bio || doctor.bio || "No bio available"}
+</Paragraph>
                 <Divider />
                 
                 <Title level={4} className="section-title">
@@ -353,7 +337,7 @@ const DoctorProfile = () => {
                     format="DD-MM-YYYY"
                     value={date ? moment(date, 'DD-MM-YYYY') : null}
                     onChange={(value) => {
-                      setDate(value ? moment(value).format('DD-MM-YYYY') : null);
+                      setDate(value || null);
                     }}
                     disabledDate={(current) => current && current < moment().startOf('day')}
                     placeholder="Select Date"

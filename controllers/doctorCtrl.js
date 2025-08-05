@@ -45,22 +45,47 @@ const updateProfileController = async (req, res) => {
 };
 
 const getDoctorByIdController = async (req, res) => {
-    try {
-        const doctor = await doctorModel.findOne({ _id: req.body.doctorId });
-        res.status(200).send({
-            success: true,
-            message: 'Single Doctor info fetched',
-            data: doctor
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({
-            success: false,
-            error,
-            message: 'Error in single doc info'
-        });
+  try {
+    const { doctorId } = req.body;
+    
+    if (!doctorId) {
+      return res.status(400).send({
+        success: false,
+        message: "Doctor ID is required"
+      });
     }
-}
+
+    // Get doctor info
+    const doctor = await doctorModel.findById(doctorId);
+    
+    if (!doctor) {
+      return res.status(404).send({
+        success: false,
+        message: "Doctor not found"
+      });
+    }
+
+    // Get additional info from InfoModel using doctor's userId
+    const additionalInfo = await InfoModel.findOne({ userId: doctor.userId });
+
+    res.status(200).send({
+      success: true,
+      message: "Doctor found successfully",
+      data: {
+        ...doctor._doc,
+        additionalInfo: additionalInfo || null
+      }
+    });
+
+  } catch (error) {
+    console.error("❌ getDoctorById Error:", error);
+    res.status(500).send({
+      success: false,
+      message: "Error fetching doctor details",
+      error: error.message
+    });
+  }
+};
 
 //Doctor Appointments controller 
 const doctorAppointmentController = async (req, res) => {
