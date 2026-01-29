@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { 
-  Card, Row, Col, Button, Divider, Tag, Spin, Alert, 
-  Descriptions, Typography, Space, Image, Modal, DatePicker, TimePicker, message 
+import {
+  Card, Row, Col, Button, Divider, Tag, Spin, Alert,
+  Descriptions, Typography, Space, Image, Modal, DatePicker, TimePicker, message
 } from "antd";
-import { 
-  UserOutlined, CalendarOutlined, PhoneOutlined, 
+import {
+  UserOutlined, CalendarOutlined, PhoneOutlined,
   EnvironmentOutlined, BookOutlined, TrophyOutlined,
-  ClockCircleOutlined, DollarOutlined, StarOutlined 
+  ClockCircleOutlined, DollarOutlined, StarOutlined
 } from "@ant-design/icons";
 import MyLayout from "../components/layout";
 import moment from "moment";
@@ -19,7 +19,7 @@ const { Title, Text, Paragraph } = Typography;
 
 const DoctorProfile = () => {
   // 🔥 FIXED: Changed from 'id' to 'doctorId' to match the route parameter
-  const { doctorId } = useParams(); 
+  const { doctorId } = useParams();
   const navigate = useNavigate();
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -29,33 +29,33 @@ const DoctorProfile = () => {
   const [time, setTime] = useState();
   const { user } = useSelector(state => state.user);
 
- const fetchDoctorProfile = async () => {
-  try {
-    setLoading(true);
-    setError(null);
-    const token = localStorage.getItem("token");
+  const fetchDoctorProfile = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const token = localStorage.getItem("token");
 
-    console.log("🔍 Fetching doctor with ID:", doctorId);
+      console.log("🔍 Fetching doctor with ID:", doctorId);
 
-    const res = await axios.post(
-      "/api/v1/doctor/getDoctorById",
-      { doctorId }, // Using the doctorId from URL params
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+      const res = await axios.post(
+        "/api/v1/doctor/getDoctorById",
+        { doctorId }, // Using the doctorId from URL params
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-    if (!res.data.success || !res.data.data) {
-      throw new Error(res.data.message || "Doctor not found");
+      if (!res.data.success || !res.data.data) {
+        throw new Error(res.data.message || "Doctor not found");
+      }
+
+      setDoctor(res.data.data);
+
+    } catch (err) {
+      console.error("❌ Fetch error:", err);
+      setError(err.response?.data?.message || "Error fetching doctor");
+    } finally {
+      setLoading(false);
     }
-
-    setDoctor(res.data.data);
-
-  } catch (err) {
-    console.error("❌ Fetch error:", err);
-    setError(err.response?.data?.message || "Error fetching doctor");
-  } finally {
-    setLoading(false);
-  }
-};
+  };
   const handleBooking = async () => {
     if (!date || !time) {
       message.warning("Please select both date and time");
@@ -68,17 +68,25 @@ const DoctorProfile = () => {
       const res = await axios.post(
         '/api/v1/user/book-appointment',
         {
-          doctorId: doctorId, // 🔥 FIXED: Using consistent doctorId
+          doctorId,
           userId: user._id,
-          doctorInfo: doctor,
+          doctorInfo: {
+            _id: doctor._id,
+            f_name: doctor.f_name,
+            l_name: doctor.l_name,
+            specialization: doctor.specialization,
+            feePerConsulatation: doctor.feePerConsulatation,
+            timings: doctor.timings
+          },
           userInfo: user,
-          date,
+          date: moment(date).format("DD-MM-YYYY"), // ✅ FIX
           time: time.format("HH:mm")
         },
         {
           headers: { Authorization: `Bearer ${token}` }
         }
       );
+
 
       if (res.data.success) {
         message.success(res.data.message);
@@ -98,22 +106,22 @@ const DoctorProfile = () => {
 
   const isTimeInSchedule = (selectedTime) => {
     if (!doctor || !doctor.timings || !selectedTime) return false;
-    
+
     const [start, end] = doctor.timings;
     const startTime = moment(start, 'HH:mm A');
     const endTime = moment(end, 'HH:mm A');
     const timeToCheck = moment(selectedTime.format('HH:mm A'), 'HH:mm A');
-    
+
     return timeToCheck.isBetween(startTime, endTime, null, '[]');
   };
 
   const getDisabledHours = () => {
     if (!doctor || !doctor.timings) return [];
-    
+
     const [start, end] = doctor.timings;
     const startHour = parseInt(moment(start, 'HH:mm A').format('H'));
     const endHour = parseInt(moment(end, 'HH:mm A').format('H'));
-    
+
     const disabledHours = [];
     for (let i = 0; i < 24; i++) {
       if (i < startHour || i >= endHour) {
@@ -195,15 +203,15 @@ const DoctorProfile = () => {
                   </div>
                 )}
               </div>
-              
+
               <Title level={2} className="doctor-name">
                 Dr. {doctor.f_name} {doctor.l_name}
               </Title>
-              
+
               <Tag color="blue" icon={<StarOutlined />} className="specialization-tag">
                 {doctor.specialization}
               </Tag>
-              
+
               <div className="doctor-stats">
                 <div className="stat-item">
                   <TrophyOutlined />
@@ -214,10 +222,10 @@ const DoctorProfile = () => {
                   <span>₹{doctor.feePerConsulatation || 0} per consultation</span>
                 </div>
               </div>
-              
-              <Button 
-                type="primary" 
-                size="large" 
+
+              <Button
+                type="primary"
+                size="large"
                 block
                 onClick={() => setBookingModalVisible(true)}
                 className="book-appointment-btn"
@@ -225,18 +233,18 @@ const DoctorProfile = () => {
                 Book Appointment
               </Button>
             </Col>
-            
+
             {/* Doctor Details */}
             <Col xs={24} md={16}>
               <div className="doctor-details-section">
                 <Title level={4} className="section-title">
-  <UserOutlined /> About Doctor
-</Title>
-<Paragraph>
-  {doctor.additionalInfo?.bio || doctor.bio || "No bio available"}
-</Paragraph>
+                  <UserOutlined /> About Doctor
+                </Title>
+                <Paragraph>
+                  {doctor.additionalInfo?.bio || doctor.bio || "No bio available"}
+                </Paragraph>
                 <Divider />
-                
+
                 <Title level={4} className="section-title">
                   <CalendarOutlined /> Availability
                 </Title>
@@ -259,7 +267,7 @@ const DoctorProfile = () => {
                     <Text>{doctor.address || doctor.additionalInfo?.address || 'Not specified'}</Text>
                   </div>
                 </Space>
-                
+
                 {doctor.additionalInfo?.education && (
                   <>
                     <Divider />
@@ -299,7 +307,7 @@ const DoctorProfile = () => {
             </Col>
           </Row>
         </Card>
-        
+
         {/* Booking Modal */}
         <Modal
           title={`Book Appointment with Dr. ${doctor.f_name} ${doctor.l_name}`}
@@ -309,9 +317,9 @@ const DoctorProfile = () => {
             <Button key="back" onClick={() => setBookingModalVisible(false)}>
               Cancel
             </Button>,
-            <Button 
-              key="submit" 
-              type="primary" 
+            <Button
+              key="submit"
+              type="primary"
               onClick={handleBooking}
               disabled={!date || !time}
             >
@@ -328,14 +336,14 @@ const DoctorProfile = () => {
                   <Text strong>Available Timings:</Text> {doctor.timings?.[0] || 'Not specified'} - {doctor.timings?.[1] || 'Not specified'}
                 </div>
               </Col>
-              
+
               <Col xs={24} md={12}>
                 <div className="form-item">
                   <Text strong>Select Date</Text>
                   <DatePicker
                     style={{ width: '100%' }}
                     format="DD-MM-YYYY"
-                    value={date ? moment(date, 'DD-MM-YYYY') : null}
+                    value={date}
                     onChange={(value) => {
                       setDate(value || null);
                     }}
@@ -345,7 +353,7 @@ const DoctorProfile = () => {
                   />
                 </div>
               </Col>
-              
+
               <Col xs={24} md={12}>
                 <div className="form-item">
                   <Text strong>Select Time</Text>
@@ -371,16 +379,17 @@ const DoctorProfile = () => {
                   />
                 </div>
               </Col>
-              
+
               {date && time && (
                 <Col span={24}>
                   <div className="selected-slot">
                     <Text strong>Selected Appointment Slot:</Text><br />
-                    <Text>📅 {moment(date, 'DD-MM-YYYY').format('dddd, MMMM Do YYYY')}</Text><br />
+                    <Text>📅 {date.format('dddd, MMMM Do YYYY')}</Text><br />
                     <Text>🕐 {time.format('hh:mm A')}</Text>
                   </div>
                 </Col>
               )}
+
             </Row>
           </div>
         </Modal>
