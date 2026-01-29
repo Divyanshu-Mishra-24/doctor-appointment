@@ -1,108 +1,155 @@
-.form-container {
+.auth-page {
+  height: 100vh;
+  background: linear-gradient(-45deg,
+      #1e3c72,
+      #2a5298,
+      #1cb5e0,
+      #3b82f6);
+  background-size: 400% 400%;
+  animation: gradientFlow 18s ease infinite;
+
   display: flex;
   align-items: center;
-  justify-self: center;
-  height: 100vh;
-  z-index: 10;
-  /* width: 100%; */
-  /* border: 1px solid; */
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.register-form {
-  border: 1px solid rgba(255, 255, 255, 0.5);;
-  padding: 30px;
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-blob {
+  position: absolute;
   width: 400px;
-  background-color: rgba(255, 255, 255, 0.9);
-  /* light but see-through */
-  color: #333;
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(18, 255, 247, 0.2);
-  /* backdrop-filter: blur(4px); */
+  height: 400px;
+  background: red;
+  /* 🔴 FORCE COLOR */
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: floatBlob 10s infinite linear;
+  z-index: 2;
 }
 
-body {
-  background: linear-gradient(135deg, #b3ffab 0%, #12fff7 100%);
-  background-attachment: fixed;
-  margin: 0;
-  font-family: Arial, sans-serif;
+
+.blob1 {
+  top: 10%;
+  left: 15%;
 }
 
-.inline-message {
-  padding: 10px;
-  margin-bottom: 15px;
-  border-radius: 5px;
-  font-weight: 500;
-  font-size: 15px;
-  text-align: center;
+.blob2 {
+  bottom: 15%;
+  right: 18%;
+  animation-delay: 6s;
+}
+
+@keyframes floatBlob {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  50% {
+    transform: translate(40px, -30px);
+  }
+
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.auth-card {
+  width: 900px;
+  height: 500px;
+  background: #fff;
+  border-radius: 20px;
+  display: flex;
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+}
+
+.auth-left {
+  flex: 1;
+  background: #f5f7fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-left img {
+  width: 80%;
+}
+
+.auth-right {
+  flex: 1;
+  padding: 50px;
+}
+
+.auth-right h2 {
+  font-size: 26px;
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.auth-right input {
+  height: 45px;
+  border-radius: 8px;
+}
+
+.auth-btn {
   width: 100%;
-}
-
-.inline-message.success {
-  background-color: #e6ffed;
-  color: #2e7d32;
-  border: 1px solid #81c784;
-}
-
-.inline-message.error {
-  background-color: #ffe6e6;
-  color: #c62828;
-  border: 1px solid #ef9a9a;
-}
-
-.register-form h2 {
-  color: #006d6b; /* Dark teal that matches your gradient */
-  text-align: center;
-  margin-bottom: 25px;
-  font-weight: 600;
-}
-
-.register-form h2 {
-  color: #006d6b; /* Dark teal that matches your gradient */
-  text-align: center;
-  margin-bottom: 25px;
-  font-weight: 600;
-}
-
-.register-form input {
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 6px;
-  padding: 12px 15px;
-  margin-bottom: 15px;
-  width: 100%;
-  transition: all 0.3s ease;
-}
-
-.register-form input:focus {
-  outline: none;
-  border-color: #12fff7; /* Your cyan color */
-  box-shadow: 0 0 0 2px rgba(18, 255, 247, 0.2);
-}
-
-.register-form button {
-  background: linear-gradient(to right, #b3ffab, #12fff7);
+  height: 45px;
+  border-radius: 8px;
   border: none;
-  color: #006d6b;
-  padding: 12px;
-  border-radius: 6px;
-  width: 100%;
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  color: white;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  margin-top: 10px;
 }
 
-.register-form button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(18, 255, 247, 0.3);
+.auth-btn:hover {
+  opacity: 0.9;
 }
 
-.register-form a {
-  color: #00807d;
-  text-decoration: none;
-  font-weight: 500;
+.switch-text {
+  margin-top: 20px;
+  text-align: center;
 }
 
-.register-form a:hover {
-  text-decoration: underline;
+.switch-text a {
+  color: #4facfe;
+  font-weight: 600;
+}
+
+.auth-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.switch-text {
+  margin-top: 18px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.switch-text a {
+  color: #38bdf8;
+  font-weight: 600;
 }

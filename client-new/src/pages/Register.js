@@ -41,45 +41,64 @@ const Register = () => {
     };
 
     return (
-        <>
-            <div className="form-container">
-                {formMessage && (
-                    <div className={`inline-message ${messageType}`}>
-                        {formMessage}
-                    </div>
-                )}
-                <Form layout="vertical" onFinish={onFinishHandler} className="register-form">
-                    <h3 className="text-center">Register Form</h3>
-                    <Form.Item label="First Name" name="f_name">
-                        <Input type="text" required autoComplete="off" />
-                    </Form.Item>
-                    <Form.Item label="Last Name" name="l_name">
-                        <Input type="text" required autoComplete="family-name"/>
-                    </Form.Item>
-                    <Form.Item label="Email" name="email">
-                        <Input type="email" required autoComplete="new-email"/>
-                    </Form.Item>
-                    <Form.Item label="Password" name="passwd">
-                        <Input type="password" required autoComplete="new-password"/>
-                    </Form.Item>
-                    {/* <Form.Item label="Registering as:" name="isDoctor">
-                        <Radio.Group onChange={(e) => setIsDoctor(e.target.value)} value={isDoctor}>
-                            <Radio value={false}>Patient</Radio>
-                            <Radio value={true}>Doctor</Radio>
-                        </Radio.Group>
-                    </Form.Item> */}
-                    <Link to='/login' className="m-2">Already a user?</Link>
-                    <button
-                        className="btn"
-                        type="submit"
-                        style={{ backgroundColor: '#0000FF', color: 'black', padding: '10px 20px', border: 'none', borderRadius: '5px' }}
-                    >
-                        Register
-                    </button>
-                </Form>
-            </div>
-        </>
-    );
+  <div className="auth-page">
+    <div className="bg-blob blob1"></div>
+  <div className="bg-blob blob2"></div>
+    <div className="auth-card">
+
+      {/* LEFT */}
+      <div className="auth-left">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/5087/5087579.png"
+          alt="register illustration"
+        />
+      </div>
+
+      {/* RIGHT */}
+      <div className="auth-right">
+
+        {formMessage && (
+          <div className={`inline-message ${messageType}`}>
+            {formMessage}
+          </div>
+        )}
+
+        <Form layout="vertical" onFinish={onFinishHandler}>
+          <h2>Create Account</h2>
+          <p className="subtitle">Register to get started</p>
+
+          <Form.Item name="f_name" rules={[{ required: true }]}>
+            <Input placeholder="First Name" />
+          </Form.Item>
+
+          <Form.Item name="l_name" rules={[{ required: true }]}>
+            <Input placeholder="Last Name" />
+          </Form.Item>
+
+          <Form.Item name="email" rules={[{ required: true, type: "email" }]}>
+            <Input placeholder="Email address" />
+          </Form.Item>
+
+          <Form.Item name="passwd" rules={[{ required: true }]}>
+            <Input.Password placeholder="Password" />
+          </Form.Item>
+
+          <button className="auth-btn" type="submit">
+            Sign Up
+          </button>
+        </Form>
+
+        {/* ⬇⬇⬇ MOVE LINK OUTSIDE FORM ⬇⬇⬇ */}
+        <div className="switch-text">
+          Already have an account?{" "}
+          <Link to="/login">Login</Link>
+        </div>
+
+      </div>
+    </div>
+  </div>
+);
+
 };
 
 export default Register;
