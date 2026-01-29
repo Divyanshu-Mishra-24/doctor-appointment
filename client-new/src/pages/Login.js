@@ -1,22 +1,22 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import '../styles/loginStyle.css'
 import { Form, Input, message as antdMessage } from "antd";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {useDispatch} from 'react-redux'
-import {showLoading,hideLoading} from '../redux/features/alertSlice'
+import { useDispatch } from 'react-redux'
+import { showLoading, hideLoading } from '../redux/features/alertSlice'
 
 const Login = () => {
     const [formMessage, setFormMessage] = useState(null);
     const [messageType, setMessageType] = useState(''); // 'success' or 'error'
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const onFinishHandler = async(values) => {
+    const onFinishHandler = async (values) => {
         try {
             dispatch(showLoading())
             const res = await axios.post('/api/v1/user/login', values);
             dispatch(hideLoading())
-            if(res.data.success){
+            if (res.data.success) {
                 localStorage.setItem("token", res.data.token);
                 setMessageType('success');
                 setFormMessage('Login successful');
@@ -38,30 +38,52 @@ const Login = () => {
 
     return (
         <>
-            <div className="form-container">
-                {formMessage && (
-                    <div className={`inline-message ${messageType}`}>
-                        {formMessage}
+            <div className="auth-page">
+                <div className="bg-blob blob1"></div>
+                <div className="bg-blob blob2"></div>
+                <div className="auth-card">
+
+                    {/* LEFT ILLUSTRATION */}
+                    <div className="auth-left">
+                        <img
+                            src="https://cdn-icons-png.flaticon.com/512/5087/5087579.png"
+                            alt="login illustration"
+                        />
                     </div>
-                )}
-                <Form layout="vertical" onFinish={onFinishHandler} className="register-form">
-                    <h3 className="text-center">Login Form</h3>
-                    <Form.Item label="Email" name="email">
-                        <Input type="email" required />
-                    </Form.Item>
-                    <Form.Item label="Password" name="passwd">
-                        <Input type="password" required />
-                    </Form.Item>
-                    <Link to='/register' className="m-2">Not a user ?</Link>
-                    <button
-                        className="btn"
-                        type="submit"
-                        style={{ backgroundColor: '#0000FF', color: 'black', padding: '10px 60px', border: 'none', borderRadius: '5px' }}
-                    >
-                        Login
-                    </button>
-                </Form>
+
+                    {/* RIGHT FORM */}
+                    <div className="auth-right">
+                        {formMessage && (
+                            <div className={`inline-message ${messageType}`}>
+                                {formMessage}
+                            </div>
+                        )}
+
+                        <Form layout="vertical" onFinish={onFinishHandler}>
+                            <h2>Welcome Back</h2>
+                            <p className="subtitle">Login to your account</p>
+
+                            <Form.Item name="email">
+                                <Input placeholder="Email address" />
+                            </Form.Item>
+
+                            <Form.Item name="passwd">
+                                <Input.Password placeholder="Password" />
+                            </Form.Item>
+
+                            <button className="auth-btn" type="submit">
+                                Sign In
+                            </button>
+
+                            <p className="switch-text">
+                                Don’t have an account? <Link to="/register">Create one</Link>
+                            </p>
+                        </Form>
+                    </div>
+
+                </div>
             </div>
+
         </>
     );
 };
