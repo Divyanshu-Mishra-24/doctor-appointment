@@ -39,6 +39,7 @@ import '../styles/ProfilePage.css';
 const { Title, Text } = Typography;
 const { Option } = Select;
 const { TextArea } = Input;
+const API_BASE = "http://localhost:8000";
 
 const ProfilePage = () => {
   const { user } = useSelector(state => state.user);
@@ -271,7 +272,12 @@ const ProfilePage = () => {
                 <div style={{ position: 'relative', display: 'inline-block' }}>
                   <Avatar
                     size={100}
-src={userInfo?.profilePicture ? `${process.env.REACT_APP_API || 'http://localhost:5000'}${userInfo.profilePicture}` : null}
+src={
+  userInfo?.profilePicture
+    ? `${API_BASE}${userInfo.profilePicture}`
+    : null
+}
+
                     icon={!userInfo?.profilePicture && <UserOutlined />}
                     className="profile-avatar"
                   />
@@ -444,7 +450,12 @@ src={userInfo?.profilePicture ? `${process.env.REACT_APP_API || 'http://localhos
                 <div className="profile-complete-header">
                   <Avatar
                     size={64}
-                    src={userInfo?.profilePicture ? `${process.env.REACT_APP_API || 'http://localhost:5000'}${userInfo.profilePicture}` : null}
+                    src={
+  userInfo?.profilePicture
+    ? `${API_BASE}${userInfo.profilePicture}`
+    : null
+}
+
                     icon={!userInfo?.profilePicture && <UserOutlined />}
                     className="profile-avatar-small"
                   />

@@ -1,4 +1,7 @@
+import React from 'react';
+
 import MyLayout from '../../components/layout'
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { message, Table } from "antd";

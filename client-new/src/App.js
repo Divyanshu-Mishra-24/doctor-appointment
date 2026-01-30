@@ -100,7 +100,7 @@ function App() {
                 <ProtectedRoutes><Information/></ProtectedRoutes>
               }></Route>
 
-              <Route path='/doctorProfile/:id'
+              <Route path='/doctorProfile/:doctorId'
               element={
                 <ProtectedRoutes><DoctorProfile/></ProtectedRoutes>
               }></Route>
