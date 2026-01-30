@@ -66,6 +66,9 @@ Doctor_Appointment/
 │   ├── doctorRoutes.js
 │   └── userRoutes.js
 │
+├── Uploads/                     # Image uploads
+│   ├── Profile picture
+│
 ├── server.js                   # Entry point for the backend
 ├── .gitignore
 ├── package.json
