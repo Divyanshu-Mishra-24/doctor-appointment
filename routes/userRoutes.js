@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router=express.Router();
-const { loginController, registerController, authController ,applyDoctorController,getAllNotificationController,deleteAllNotificationController, getAllDoctorController, bookAppointmentController, bookingAvailablityController, userAppointmentController,updateProfileController,uploadProfilePictureController,uploadMiddleware,getUserByIdController} = require('../controllers/userCtrl');
+const { loginController, registerController, authController ,applyDoctorController,getAllNotificationController,deleteAllNotificationController, getAllDoctorController, bookAppointmentController, bookingAvailablityController, userAppointmentController,updateProfileController,uploadProfilePictureController,uploadMiddleware,getUserByIdController, completePaymentController} = require('../controllers/userCtrl');
 const authMiddleware = require('../middlewares/authMiddleware');
 
 //routes
@@ -40,6 +40,9 @@ router.put('/update-profile',authMiddleware,updateProfileController)
 
 //upload Profile Pic
 router.post('/upload-profile-picture',authMiddleware,uploadMiddleware,uploadProfilePictureController)
+
+//complete payment
+router.post('/complete-payment', authMiddleware, completePaymentController)
 
 router.get('/:id', authMiddleware, getUserByIdController);
 

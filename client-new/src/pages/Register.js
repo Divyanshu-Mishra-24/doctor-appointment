@@ -5,6 +5,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { showLoading, hideLoading } from '../redux/features/alertSlice';
+import { ThemeContext } from '../components/ThemeContext';
+import { useContext } from 'react';
+
+import DoctorLogo from "../components/DoctorLogo";
 
 const Register = () => {
     const [formMessage, setFormMessage] = useState(null);
@@ -12,6 +16,7 @@ const Register = () => {
     const [isDoctor, setIsDoctor] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { theme, toggleTheme } = useContext(ThemeContext);
 
     const onFinishHandler = async (values) => {
         try {
@@ -42,16 +47,16 @@ const Register = () => {
 
     return (
   <div className="auth-page">
+    <div className="theme-toggle-floating" onClick={toggleTheme}>
+      {theme === 'light' ? <i className="fa-solid fa-moon"></i> : <i className="fa-solid fa-sun"></i>}
+    </div>
     <div className="bg-blob blob1"></div>
   <div className="bg-blob blob2"></div>
     <div className="auth-card">
 
       {/* LEFT */}
       <div className="auth-left">
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/5087/5087579.png"
-          alt="register illustration"
-        />
+        <DoctorLogo size={180} />
       </div>
 
       {/* RIGHT */}

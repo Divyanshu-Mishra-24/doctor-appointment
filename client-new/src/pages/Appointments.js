@@ -5,9 +5,10 @@ import axios from "axios";
 import { message, Table } from "antd";
 import { useEffect } from "react";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const Appointments = () => {
-
+    const navigate = useNavigate();
     const [appointments, setAppointments] = useState([])
     const [loading, setLoading] = useState(false)
 
@@ -98,7 +99,44 @@ const Appointments = () => {
         },
         {
             title: "Status",
-            dataIndex: "status"
+            dataIndex: "status",
+            render: (text, record) => (
+                <span className={`status-${record.status}`}>
+                    {record.status.toUpperCase()}
+                </span>
+            )
+        },
+        {
+            title: "Action",
+            dataIndex: "action",
+            render: (text, record) => (
+                <div className="d-flex">
+                    {record.status === 'approved' && (
+                        <button 
+                            className="btn btn-primary" 
+                            onClick={() => navigate('/payment', { 
+                                state: { 
+                                    doctor: record.doctorId, 
+                                    date: moment(record.date).format('DD-MM-YYYY'), 
+                                    time: moment(record.time).format('HH:mm A'),
+                                    appointmentId: record._id
+                                } 
+                            })}
+                        >
+                            Pay Now
+                        </button>
+                    )}
+                    {record.status === 'paid' && (
+                        <span className="text-success">Paid</span>
+                    )}
+                    {record.status === 'pending' && (
+                        <span className="text-warning">Awaiting Confirmation</span>
+                    )}
+                    {record.status === 'rejected' && (
+                        <span className="text-danger">Rejected</span>
+                    )}
+                </div>
+            )
         }
     ]
 

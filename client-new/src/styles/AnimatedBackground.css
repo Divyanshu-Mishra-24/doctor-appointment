@@ -1,0 +1,218 @@
+.animated-medical-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; /* Let clicks pass through */
+  z-index: 0; 
+  overflow: hidden;
+  opacity: 1; /* SVGs manage internal opacities */
+}
+
+/* Common SVG styling for holographic glow borders */
+.medical-svg {
+  position: absolute;
+  opacity: var(--symbol-op);
+  filter: drop-shadow(0 0 10px currentColor);
+}
+
+.svg-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* Holographic EKG Line */
+.ekg-line {
+  width: 120%;
+  height: 200px;
+  top: 30%;
+  left: -10%;
+  opacity: var(--ecg-op);
+  transform: rotate(-5deg);
+  animation: slideEKG 20s linear infinite;
+  filter: drop-shadow(0 0 15px var(--gradient-mid));
+}
+
+@keyframes slideEKG {
+  0% { transform: translateX(-10%) rotate(-5deg); }
+  100% { transform: translateX(10%) rotate(-5deg); }
+}
+
+/* Stethoscope floating */
+.stethoscope {
+  width: 200px;
+  height: 200px;
+  bottom: 8%;
+  left: 5%;
+  animation: floatSlow 12s ease-in-out infinite;
+}
+
+/* Plus floating */
+.plus-icon {
+  width: 80px;
+  height: 80px;
+  top: 15%;
+  left: 15%;
+  animation: floatFast 6s ease-in-out infinite alternate;
+}
+
+/* Cross floating */
+.cross {
+  width: 150px;
+  height: 150px;
+  top: 15%;
+  right: 15%;
+  animation: floatRotate 10s ease-in-out infinite;
+}
+
+/* Heart floating */
+.heart {
+  width: 100px;
+  height: 100px;
+  bottom: 25%;
+  right: 12%;
+  animation: pulseBeat 4s ease-in-out infinite;
+}
+
+/* Capsule floating */
+.capsule {
+  width: 120px;
+  height: 120px;
+  top: 45%;
+  left: 10%;
+  animation: floatTwist 15s ease-in-out infinite;
+}
+
+/* DNA floating */
+.dna {
+  width: 160px;
+  height: 160px;
+  bottom: 10%;
+  right: 25%;
+  animation: floatSlow 14s ease-in-out infinite reverse;
+}
+
+/* Keyframes for elements */
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0) rotate(5deg); }
+  50% { transform: translateY(-20px) rotate(-5deg); }
+}
+
+@keyframes floatFast {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.1); }
+}
+
+@keyframes floatRotate {
+  0%, 100% { transform: translateY(0) rotate(-15deg); }
+  50% { transform: translateY(-20px) rotate(15deg); }
+}
+
+@keyframes pulseBeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.15); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.15); }
+}
+
+@keyframes floatTwist {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-40px) rotate(180deg); }
+}
+
+/* Drawing animations */
+.draw-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 12s ease-in-out infinite forwards;
+}
+
+.ekg-line .draw-path {
+  stroke-dasharray: 2000;
+  stroke-dashoffset: 2000;
+  animation: drawEKG 6s ease-in-out infinite forwards;
+}
+
+@keyframes drawLine {
+  0% { stroke-dashoffset: 1000; }
+  30% { stroke-dashoffset: 0; }
+  70% { stroke-dashoffset: 0; } 
+  100% { stroke-dashoffset: -1000; } 
+}
+
+@keyframes drawEKG {
+  0% { stroke-dashoffset: 2000; opacity: 0; }
+  10% { opacity: 1; }
+  45% { stroke-dashoffset: 0; }
+  55% { stroke-dashoffset: 0; }
+  90% { opacity: 1; }
+  100% { stroke-dashoffset: -2000; opacity: 0; }
+}
+
+/* Soft Glowing Blobs moving slowly */
+.bg-blob-slow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  -webkit-filter: blur(120px);
+  z-index: -1;
+  opacity: var(--glow-op);
+  animation: blobSlowMove 25s infinite alternate ease-in-out;
+}
+
+.blob-1 {
+  width: 500px;
+  height: 500px;
+  top: -10%;
+  left: -10%;
+  background: var(--primary-color);
+  animation-duration: 30s;
+}
+
+.blob-2 {
+  width: 600px;
+  height: 600px;
+  bottom: -20%;
+  right: -10%;
+  background: var(--accent-color);
+  animation-duration: 25s;
+  animation-delay: -5s;
+}
+
+.blob-3 {
+  width: 400px;
+  height: 400px;
+  top: 40%;
+  left: 50%;
+  background: var(--secondary-color);
+  animation-duration: 35s;
+  animation-delay: -15s;
+}
+
+@keyframes blobSlowMove {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(50px, -80px) scale(1.1); }
+  100% { transform: translate(-40px, 40px) scale(0.9); }
+}
+
+/* Light Pulse Glow */
+.light-pulse-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  height: 80vh;
+  background: radial-gradient(circle, var(--accent-color) 0%, transparent 60%);
+  opacity: var(--glow-op);
+  filter: blur(80px);
+  animation: pulseGlow 8s infinite alternate ease-in-out;
+  z-index: -1;
+}
+
+@keyframes pulseGlow {
+  0% { opacity: calc(var(--glow-op) * 0.5); transform: translate(-50%, -50%) scale(0.8); }
+  100% { opacity: var(--glow-op); transform: translate(-50%, -50%) scale(1.1); }
+}

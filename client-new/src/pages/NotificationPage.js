@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { hideLoading, showLoading } from "../redux/features/alertSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { setUser } from "../redux/features/userSlice";
 
 //read notification
 const NotificationPage = () => {
@@ -23,6 +24,7 @@ const NotificationPage = () => {
             )
             dispatch(hideLoading())
             if (res.data.success) {
+                dispatch(setUser(res.data.data));
                 message.success(res.data.message)
             }
             else {
@@ -49,6 +51,7 @@ const NotificationPage = () => {
             )
             dispatch(hideLoading())
             if (res.data.success) {
+                dispatch(setUser(res.data.data));
                 message.success(res.data.message)
             }
             else {
@@ -75,7 +78,7 @@ const NotificationPage = () => {
                     {
                         user?.notification.map(notificationMSG => (
                             <div className="card" style={{ cursor: "pointer" }}>
-                                <div className="card-text " onClick={navigate(notificationMSG.onClickPath)}>
+                                <div className="card-text " onClick={() => navigate(notificationMSG.onClickPath)}>
                                     {notificationMSG.message}
                                 </div>
                             </div>
@@ -89,7 +92,7 @@ const NotificationPage = () => {
                     {
                         user?.seennotification.map(notificationMSG => (
                             <div className="card" style={{ cursor: "pointer" }}>
-                                <div className="card-text " onClick={navigate(notificationMSG.onClickPath)}>
+                                <div className="card-text " onClick={() => navigate(notificationMSG.onClickPath)}>
                                     {notificationMSG.message}
                                 </div>
                             </div>

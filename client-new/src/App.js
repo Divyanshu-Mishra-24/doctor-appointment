@@ -21,6 +21,7 @@ import ProfilePage from './pages/ProfilePage';
 import DoctorsPage from './pages/DoctorsPage';
 import Information from './pages/doctor/Infomation';
 import DoctorProfile from './pages/DoctorProfile';
+import PaymentPage from './pages/PaymentPage';
 
 
 function App() {
@@ -103,6 +104,11 @@ function App() {
               <Route path='/doctorProfile/:doctorId'
               element={
                 <ProtectedRoutes><DoctorProfile/></ProtectedRoutes>
+              }></Route>
+
+              <Route path='/payment'
+              element={
+                <ProtectedRoutes><PaymentPage/></ProtectedRoutes>
               }></Route>
 
           </Routes>)

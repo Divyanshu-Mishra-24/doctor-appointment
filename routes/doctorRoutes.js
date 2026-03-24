@@ -32,6 +32,9 @@ router.post('/update-status', authMiddleware, updateStatusController)
 router.get('/info/:id', authMiddleware, getAdditionalInfoController);
 router.post('/info/:id', authMiddleware, createAdditionalInfoController);
 router.put('/info/:id', authMiddleware, updateAdditionalInfoController);
+// ✅ PUT THIS IN ROUTES FILE
+router.post('/info/:userId', authMiddleware,getDoctorInfoController);
+
 
 
 module.exports = router

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MyLayout from '../components/layout';
 import axios from 'axios';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { DatePicker, message, TimePicker, Button } from "antd";
 import moment from 'moment';
 import { useDispatch, useSelector } from "react-redux";
@@ -11,6 +11,7 @@ const BookingPage = () => {
   const { user } = useSelector(state => state.user);
   const [doctor, setDoctor] = useState(null);
   const params = useParams();
+  const navigate = useNavigate();
   const [date, setDate] = useState();
   const [timings, setTimings] = useState(null);
 
@@ -61,18 +62,19 @@ const BookingPage = () => {
       );
 
       dispatch(hideLoading());
-      
+
       if (res.data.success) {
-        message.success(res.data.message);
-        setDate(null);
-        setTimings(null);
+        message.success("Appointment request sent! Waiting for doctor confirmation.");
+        setTimeout(() => {
+          navigate('/appointments');
+        }, 1500);
       } else {
         message.error(res.data.message || "Failed to book appointment");
       }
     } catch (error) {
       dispatch(hideLoading());
       console.error("❌ Booking error:", error);
-      
+
       if (error.response?.data?.message) {
         message.error(error.response.data.message);
       } else {
@@ -83,22 +85,22 @@ const BookingPage = () => {
 
   const isTimeInSchedule = (time) => {
     if (!doctor || !doctor.timings || !time) return false;
-    
+
     const [start, end] = doctor.timings;
     const startTime = moment(start, 'HH:mm A');
     const endTime = moment(end, 'HH:mm A');
     const selectedTime = moment(time.format('HH:mm A'), 'HH:mm A');
-    
+
     return selectedTime.isBetween(startTime, endTime, null, '[]');
   };
 
   const getDisabledHours = () => {
     if (!doctor || !doctor.timings) return [];
-    
+
     const [start, end] = doctor.timings;
     const startHour = parseInt(moment(start, 'HH:mm A').format('H'));
     const endHour = parseInt(moment(end, 'HH:mm A').format('H'));
-    
+
     const disabledHours = [];
     for (let i = 0; i < 24; i++) {
       if (i < startHour || i >= endHour) {
@@ -110,19 +112,19 @@ const BookingPage = () => {
 
   const getDisabledMinutes = (selectedHour) => {
     if (!doctor || !doctor.timings) return [];
-    
+
     const [start, end] = doctor.timings;
     const startMoment = moment(start, 'HH:mm A');
     const endMoment = moment(end, 'HH:mm A');
-    
+
     if (selectedHour === startMoment.hour()) {
       return Array.from({ length: startMoment.minute() }, (_, i) => i);
     }
-    
+
     if (selectedHour === endMoment.hour()) {
       return Array.from({ length: 60 - endMoment.minute() }, (_, i) => i + endMoment.minute());
     }
-    
+
     return [];
   };
 
@@ -176,10 +178,10 @@ const BookingPage = () => {
               />
 
               {date && timings && (
-                <div className="mt-2 p-2" style={{ 
-                  backgroundColor: '#f6ffed', 
-                  border: '1px solid #b7eb8f', 
-                  borderRadius: '6px' 
+                <div className="mt-2 p-2" style={{
+                  backgroundColor: '#f6ffed',
+                  border: '1px solid #b7eb8f',
+                  borderRadius: '6px'
                 }}>
                   <strong>Selected Slot:</strong><br />
                   📅 {moment(date, 'DD-MM-YYYY').format('dddd, MMMM Do YYYY')}<br />

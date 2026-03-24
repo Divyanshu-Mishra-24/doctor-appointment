@@ -3,14 +3,19 @@ import '../styles/loginStyle.css'
 import { Form, Input, message as antdMessage } from "antd";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useDispatch } from 'react-redux'
-import { showLoading, hideLoading } from '../redux/features/alertSlice'
+import { useDispatch } from 'react-redux';
+import { showLoading, hideLoading } from '../redux/features/alertSlice';
+import { ThemeContext } from '../components/ThemeContext';
+import { useContext } from 'react';
+
+import DoctorLogo from "../components/DoctorLogo";
 
 const Login = () => {
     const [formMessage, setFormMessage] = useState(null);
     const [messageType, setMessageType] = useState(''); // 'success' or 'error'
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { theme, toggleTheme } = useContext(ThemeContext);
     const onFinishHandler = async (values) => {
         try {
             dispatch(showLoading())
@@ -39,16 +44,16 @@ const Login = () => {
     return (
         <>
             <div className="auth-page">
+                <div className="theme-toggle-floating" onClick={toggleTheme}>
+                   {theme === 'light' ? <i className="fa-solid fa-moon"></i> : <i className="fa-solid fa-sun"></i>}
+                </div>
                 <div className="bg-blob blob1"></div>
                 <div className="bg-blob blob2"></div>
                 <div className="auth-card">
 
                     {/* LEFT ILLUSTRATION */}
                     <div className="auth-left">
-                        <img
-                            src="https://cdn-icons-png.flaticon.com/512/5087/5087579.png"
-                            alt="login illustration"
-                        />
+                        <DoctorLogo size={180} />
                     </div>
 
                     {/* RIGHT FORM */}

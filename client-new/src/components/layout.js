@@ -3,12 +3,18 @@ import "../styles/LayoutStyles.css";
 import { adminMenu, userMenu } from "../Data/data";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
-import { Badge, message } from 'antd'
+import { Badge, message } from 'antd';
+import { ThemeContext } from './ThemeContext';
+import { useContext } from 'react';
+import AnimatedBackground from './AnimatedBackground';
+
+import DoctorLogo from "./DoctorLogo";
 
 const MyLayout = ({ children }) => {
     const location = useLocation();
     const { user } = useSelector(state => state.user)
     const navigate = useNavigate()
+    const { theme, toggleTheme } = useContext(ThemeContext);
 
     //logout function
     const handleLogout = () => {
@@ -56,9 +62,9 @@ const MyLayout = ({ children }) => {
                 {/* Top Navigation Bar */}
                 <div className="navbar">
                     <div className="navbar-left">
-                        <div className="logo">
-                            <h4>Doctor's App</h4>
-                        </div>
+                        <Link to="/" className="logo">
+                            <DoctorLogo size={42} />
+                        </Link>
                         <div className="nav-menu">
                             {SidebarMenu.map((menu, index) => {
                                 const isActive = location.pathname === menu.path;
@@ -76,10 +82,29 @@ const MyLayout = ({ children }) => {
                     </div>
                     <div className="navbar-right">
                         <div className="header-content">
+                            <div className="theme-toggle" onClick={toggleTheme}>
+                                {theme === 'light' ? (
+                                    <i className="fa-solid fa-moon"></i>
+                                ) : (
+                                    <i className="fa-solid fa-sun"></i>
+                                )}
+                            </div>
                             <Badge count={user && user.notification.length} onClick={()=>{navigate('/notification')}}>
                                  <i className="fa-solid fa-bell"></i>
                             </Badge>
-                            <Link to='/profile' className="user-name">{user?.f_name}</Link>
+                            <Link to='/profile' className="user-profile-link">
+                                {user?.profilePicture ? (
+                                    <img 
+                                        src={user.profilePicture} 
+                                        alt="profile" 
+                                        className="nav-profile-pic" 
+                                    />
+                                ) : (
+                                    <div className="nav-profile-initial">
+                                        {user?.f_name?.charAt(0).toUpperCase()}
+                                    </div>
+                                )}
+                            </Link>
                             <div
                                 className="logout-btn"
                                 onClick={handleLogout}
@@ -93,6 +118,7 @@ const MyLayout = ({ children }) => {
                 
                 {/* Main Content */}
                 <div className="content">
+                    {location.pathname !== '/' && <AnimatedBackground />}
                     <div className="body">
                         {children}
                     </div>

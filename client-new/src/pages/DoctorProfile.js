@@ -89,10 +89,11 @@ const DoctorProfile = () => {
 
 
       if (res.data.success) {
-        message.success(res.data.message);
+        message.success("Appointment request sent! Waiting for doctor confirmation.");
         setBookingModalVisible(false);
-        setDate(null);
-        setTime(null);
+        setTimeout(() => {
+          navigate('/appointments');
+        }, 1500);
       } else {
         message.error(res.data.message || "Failed to book appointment");
       }

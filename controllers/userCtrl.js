@@ -1,7 +1,6 @@
 const userModel = require('../models/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { token } = require('morgan');
 const doctorModel = require('../models/doctorModel')
 const appointmentModel = require('../models/appointmentModel')
 const moment = require('moment')
@@ -210,10 +209,7 @@ const getAllNotificationController = async (req, res) => {
     res.status(200).send({
       success: true,
       message: 'Notifications marked as read',
-      data: {
-        notifications: user.notification, // Now empty
-        seenNotifications: user.seennotification // Contains all
-      }
+      data: user
     });
   } catch (error) {
     console.error(error);
@@ -274,8 +270,8 @@ const bookAppointmentController = async (req, res) => {
   try {
     // First, check availability before booking
     const date = moment(req.body.date, 'DD-MM-YYYY').toISOString();
-    const fromTime = moment(req.body.time, 'HH:mm').subtract(1, 'hours').toISOString();
-    const toTime = moment(req.body.time, 'HH:mm').add(1, 'hours').toISOString();
+    const fromTime = moment(req.body.time, 'HH:mm').subtract(14, 'minutes').toISOString();
+    const toTime = moment(req.body.time, 'HH:mm').add(14, 'minutes').toISOString();
     const doctorId = req.body.doctorId;
 
     console.log("📅 Booking request with availability check:", {
@@ -346,8 +342,8 @@ const bookAppointmentController = async (req, res) => {
 const bookingAvailablityController = async (req, res) => {
   try {
     const date = moment(req.body.date, 'DD-MM-YYYY').toISOString();
-    const fromTime = moment(req.body.time, 'HH:mm').subtract(1, 'hours').toISOString();
-    const toTime = moment(req.body.time, 'HH:mm').add(1, 'hours').toISOString();
+    const fromTime = moment(req.body.time, 'HH:mm').subtract(14, 'minutes').toISOString();
+    const toTime = moment(req.body.time, 'HH:mm').add(14, 'minutes').toISOString();
     const doctorId = req.body.doctorId;
 
     console.log("🔍 Availability check:", {
@@ -614,6 +610,27 @@ const uploadProfilePictureController = async (req, res) => {
   }
 };
 
+// complete payment controller
+const completePaymentController = async (req, res) => {
+  try {
+    const { appointmentId } = req.body;
+    const appointment = await appointmentModel.findByIdAndUpdate(appointmentId, { status: 'paid' });
+    
+    res.status(200).send({
+      success: true,
+      message: 'Payment completed and appointment status updated',
+      data: appointment
+    });
+  } catch (error) {
+    console.error("❌ Payment Error:", error);
+    res.status(500).send({
+      success: false,
+      message: 'Error while completing payment',
+      error: error.message
+    });
+  }
+};
+
 // Get user by ID controller
 const getUserByIdController = async (req, res) => {
   try {
@@ -653,5 +670,6 @@ module.exports = {
   updateProfileController,
   uploadProfilePictureController,
   uploadMiddleware,
-  getUserByIdController
+  getUserByIdController,
+  completePaymentController
 };
